@@ -6,11 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="UninaTestPipeline" />
+        <module name="UninaTestPipeline-master" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="UninaTestPipeline" target="8" />
+      <module name="UninaTestPipeline-master" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
