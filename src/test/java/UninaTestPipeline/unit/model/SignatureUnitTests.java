@@ -14,12 +14,10 @@ import org.junit.experimental.categories.Category;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static de.rwth.swc.coffee4j.engine.configuration.model.constraints.ConstraintBuilder.constrain;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 @Category(UnitTest.class)
 public class SignatureUnitTests {
@@ -51,18 +49,4 @@ public class SignatureUnitTests {
 
     }
 
-    @CombinatorialTest()
-    @EnableGeneration()
-    public void checkSetFirstName(@InputParameter("FirstName") String FirstName){
-        Set<String> FirstNames = Signature.getFirstNameSet(signatures);
-        assertTrue(FirstNames.contains(FirstName));
-    }
-
-    @CombinatorialTest()
-    @EnableGeneration()
-    public void checkSetLastName(@InputParameter("LastName") String LastName){
-        Set<String> LastNames = Signature.getLastNameSet(signatures);
-        assertTrue(LastNames.contains(LastName));
-
-    }
 }
