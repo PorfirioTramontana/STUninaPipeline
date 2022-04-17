@@ -1,0 +1,167 @@
+# La keyword 'stages' viene utilizzata per definire gli stage che contengono i jobs, e viene definita globalmente per la pipeline
+# L'ordine degli elementi in stages definisce l'ordinamento d'esecuzione dei jobs e rende possibile eseguire i jobs in parallelo o in serie
+# Per esempio nello stage 'verify' sono stati definiti i jobs 'lint' e 'spotbugs' da eseguire in parallelo
+# Per ogni stage, i suoi jobs sono eseguiti solo se tutti i jobs dagli stage precedenti sono completati correttamente o sono 'allowed to fail'
+stages:
+    - build
+    - verify
+    - unit-test
+    - integration-test
+    - package
+    - release
+    - deploy
+
+# Le variabili sono valori configurabili che vengono passati ai job
+# La keyword 'variables' viene usata per definire variabili: possono essere definite globalmente o in un job particolare
+# Variabili come MAVEN_OPTS sono chiamate 'custom variables', perché sono definite dallo sviluppatore
+# Invece, variabili come $CI_REGISTRY_IMAGE sono chiamate 'predefined variables', perché sono impostate dal Runner
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  # Fallisce la build se le checksum non corrispondono 
+  MAVEN_CLI_OPTS: "--strict-checksums --threads 4C --batch-mode"
+  PJ_PATH: "$CI_PROJECT_DIR"
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2    
+  CONTAINER_IMAGE: $CI_REGISTRY_IMAGE
+  DOCKER_TLS_CERTDIR: ""
+
+
+# La keyword 'image' viene usata per definire il nome della immagine Docker
+# In questo caso l'immagine maven:3.6.3-jdk8 viene recuperata dall'hub Docker
+# L'immagine viene usata all'inizio della pipeline per creare il job container,
+# il Docker Executor lo esegue prima di effettuare le task CI della pipeline
+# Nota: Quest'immagine può venire ridefinita durante la pipeline per completare un task/job specifico
+image: maven:3.6.3-jdk-8
+
+# La keyword 'cache' viene usata per specificare una lista di file e cartelle che dovrebbero essere memorizzate (cached) tra i jobs
+# In questo caso la keyword 'cache' viene definita globalmente, e ciò significa che è al di fuori degli scope dei singoli job
+# Se la cache viene definita globalmente come in questo caso, tutti i job possono usarla
+cache:
+  paths:
+    # Repository Maven locale
+    - .m2/repository/
+    # Cartella predefinita di output per gli artefatti di Maven
+    - target/
+
+# Il job 'build' compila la nostra applicazione con maven usando "mvn compile"
+# Le variabili $MAVEN_CLI_OPTS e $MAVEN_OPTS sono utilizzate nel comando 'mvn' per aggiungere più opzioni al comando mvn
+build:
+  stage: build
+  script:
+    - 'mvn $MAVEN_CLI_OPTS $MAVEN_OPTS compile'
+  
+# Il job 'lint' effettua un controllo sulla formattazione del codice
+lint:
+  stage: verify
+  script:
+    # Effettua un controllo statico del codice per trovare i problemi di design delle classi e dei metodi
+    # Inoltre ha l'abilità di controllare il layout del codice e problemi di formattazione
+    # Il plugin 'checkstyle' deve essere incluso nel pom.xml
+    - 'mvn -e $MAVEN_CLI_OPTS $MAVEN_OPTS org.apache.maven.plugins:maven-checkstyle-plugin:3.1.0:checkstyle'
+  # Permette alla pipeline di continuare anche se 'checkstyle' trova problemi, perché non sono critici
+  allow_failure: true
+  # In caso di fallimento produce il risultato del checkstyle
+  artifacts:
+    paths:
+      - 'target/checkstyle-result.xml'
+    when: on_failure
+
+# Questo job esegue 'SpotBugs', il quale è un programma che effettua un'analisi statica per cercare bug nel codice Java
+# (https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html)
+# Il plugin 'SpotBugs' deve essere definito nel pom.xml per farlo eseguire con maven
+spotbugs:
+  stage: verify
+  script:
+    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS compile com.github.spotbugs:spotbugs-maven-plugin:4.0.4:spotbugs
+  artifacts:
+    paths:
+      - target/spotbugsXml.xml
+    when: on_failure
+    
+# Questo job effettua lo unit-testing, il quale viene usato per testare le unità individuali di codice
+# In questo caso vengono effettuati dei semplici test sulla classe 'Signature'
+unit-test:
+  stage: unit-test
+  script:
+    # -P unit-test, esegue il test maven attivando il profilo 'unit-tests'
+    # Questo profilo configura il plugin 'surefire' per eseguire solo i test cases con la Categoria jUnit 'UnitTest'
+    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test -P unit-test
+
+# Gli integration test possono testare più moduli che interagiscono tra di loro
+# Nel nostro caso abbiamo due moduli di interazione, la classe Signature e il controller SignatureController
+# Nel test si prova a salvare e recuperare oggetti dal file
+integration-test:
+  stage: integration-test
+  script:
+    # -P integration-test, esegue il test maven attivando il profilo 'integration-tests'
+    # Questo profilo configura il plugin 'surefire' per eseguire solo i test cases con la Categoria jUnit 'IntegrationTest'
+    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test -P integration-test
+
+# Lo stage 'package' crea un file .jar in cui è contenuta l'applicazione compilata
+package:
+  stage: package
+  script:
+    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS -D skipTests clean package
+  # Per impostazione predefinita, tutti gli artefatti delle fasi precedenti vengono passati a ciascun job. 
+  # Tuttavia, si può utilizzare la keyword 'dependencies' per definire un elenco limitato di jobs da cui recuperare gli artefatti
+  # Dichiarazione esplicita di 0 'dependencies' per disabilitare gli artefatti del job precedente (download)
+  dependencies: []
+  # L'artefatto UninaTestPipeline-1.0-SNAPSHOT.jar viene creato nella cartella target/UninaTestPipeline-1.0-SNAPSHOT.jar
+  artifacts:
+    paths:
+      - ${PJ_PATH}/target/*.jar
+    when: on_success
+
+# Lo stage 'release' costruisce l'immagine Docker che contiene l'applicazione
+# Viene effettuato il push dell'immagine all'interno del 'GitLab Container Registry'
+release:
+  stage: release
+  image: docker:19.03.12
+  # Il servizio 'docker:dind' inizializza un Docker deamon come suo entrypoint 
+  # Un'alternativa potrebbe essere usare il comando 'dockerd' prima dello script
+  services:
+    - docker:19.03.12-dind
+  # In questo modo si  disattiva la cache globale per questo job (in questo caso non è necessaria)
+  cache: {}
+  script:
+    # Effettua il login nel GitLab Container Registry
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    # Effettua il pull dell'immagine precedente dal registro
+    - docker pull $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME || true
+    # Compila la nuova immagine, effettuando caching dall'immagine precedente (usando '--cache-from')
+    # I metadati della cache devono essere scritti nell'immagine alla creazione (usando --build-arg BUILDKIT_INLINE_CACHE=1)
+    - docker build --cache-from $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME -t $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME .
+    # Effettua il push della nuova immagine nel registro
+    - docker push $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME
+
+# Effettua il 'deploy' dell'applicazione Java con SSH su amazon AWS Ubuntu Virtual Machine,
+# caricando l'immagine Docker caricata nel registro docker nello stage release
+deploy:
+  stage: deploy
+  image: debian:stable-slim
+  # La keyword 'before_script' viene usata per definire i comandi che dovrebbero essere eseguiti prima di ogni job,
+  # includendo i job di deploy, ma dopo aver recuperato gli artefatti
+  # Nel nostro caso il 'before_script' prepara l'immagine Debian installando l'open SSH client,
+  # dando i permessi e aggiungendo la chiave privata (key.pem) per connettersi via SSH all'AWS Ubuntu Virtual Machine
+  before_script:
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > key.pem
+    - chmod 400 key.pem
+    - 'which ssh-agent || ( apt-get update -qq && apt-get install -qq openssh-client )'
+    - eval $(ssh-agent -s)
+    - ssh-add key.pem
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  # In questo modo si  disattiva la cache globale per questo job (in questo caso non è necessaria)
+  cache: {}
+  # Dichiarazione esplicita di 0 dipendenze per disabilitare gli artefatti del job precedente (download)
+  dependencies: []
+  # La keyword 'environment' descrive dove verrà effettuato il 'deploy' del codice
+  environment:
+    name: staging
+    url: http://$AWS_VM_URL
+  # La keyword 'script' permette di eseguire lo script vero e proprio
+  # Nel nostro caso da i permessi allo script '.gitlab-ci-deploy-staging.sh' e lo esegue
+  script:
+    - chmod +x .gitlab-ci-deploy-staging.sh
+    - bash .gitlab-ci-deploy-staging.sh
