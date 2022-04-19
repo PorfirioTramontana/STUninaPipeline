@@ -1,0 +1,12 @@
+name: ActionTest
+
+on:
+  - push
+jobs:
+ my-job:
+    name: My Job
+    runs-on: self-hosted
+    steps:
+       - name: Print a greeting
+         run: | 
+              echo Hello there!
