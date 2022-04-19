@@ -6,7 +6,7 @@ public class SignatureBuilder {
 
     private String FirstName;
     private String LastName;
-    private Signature buildedSignature;
+    private Signature builtSignature;
     private final SignatureChecker checker = new SignatureChecker();
 
     public SignatureBuilder(){}
@@ -18,14 +18,14 @@ public class SignatureBuilder {
         LastName = "";
         Signature theSignature = new Signature(firstName,lastName);
         if (checker.check(theSignature)){
-            buildedSignature = theSignature;
+            builtSignature = theSignature;
             return true;
         }
         return false;
     }
 
-    public Signature getBuildedSignature(){
-        return buildedSignature;
+    public Signature getBuiltSignature(){
+        return builtSignature;
     }
 
     public void setFirstName(String firstName) {
