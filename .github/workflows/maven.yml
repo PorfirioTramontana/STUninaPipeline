@@ -19,7 +19,15 @@ jobs:
         with:
           java-version: '17'
           maven-version: '3.8.5'
-      - name: Verify Maven SetUp
-        run: mvn verify
       - name: Build with Maven
         run: mvn $MAVEN_CLI_OPTS $MAVEN_OPTS compile
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkstyle
+        run: mvn -e $MAVEN_CLI_OPTS $MAVEN_OPTS org.apache.maven.plugins:maven-checkstyle-plugin:3.1.0:checkstyle > checkstyle-result.xml
+      - name: Checkstyle Aritifact Generation
+        uses: actions/upload-artifact@v3
+        with:
+          name: checkstyle-result.xml
+          path: target/checkstyle-result.xml
