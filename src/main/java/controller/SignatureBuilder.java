@@ -25,7 +25,9 @@ public class SignatureBuilder {
     }
 
     public Signature getBuiltSignature(){
-        return builtSignature;
+        Signature theSignature = builtSignature;
+        builtSignature = null;
+        return theSignature;
     }
 
     public void setFirstName(String firstName) {
@@ -40,7 +42,7 @@ public class SignatureBuilder {
 
         public boolean check(Signature theSignature) {
             if(isTheFirstOrLastNameAVoidName(theSignature.getFirstName(),theSignature.getLastName())) return false;
-            return !isTheFirstOrLastNameANonValidName(theSignature.getFirstName(), theSignature.getLastName());
+            return isTheFirstOrLastNameANonValidName(theSignature.getFirstName(), theSignature.getLastName());
         }
 
         private boolean isTheFirstOrLastNameANonValidName(String firstName, String lastName) {

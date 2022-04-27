@@ -10,7 +10,7 @@ import model.Signature;
 
 import static de.rwth.swc.coffee4j.engine.configuration.model.Parameter.parameter;
 import static de.rwth.swc.coffee4j.engine.configuration.model.constraints.ConstraintBuilder.constrain;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class SignatureBuilderTest {
 
@@ -45,24 +45,18 @@ public class SignatureBuilderTest {
 
     @CombinatorialTest()
     @EnableGeneration(algorithms = {IpogNeg.class})
-    public void checkNotBuildingNonVoidSignatures (@InputParameter("FirstName") String FirstName,
-                                         @InputParameter("LastName") String LastName){
-        Builder.setFirstName(FirstName);
-        Builder.setLastName(LastName);
-        boolean built = Builder.build();
-        assertTrue(!built && (FirstName.equals("") || LastName.equals("")));
-
-    }
-
-    @CombinatorialTest()
-    @EnableGeneration(algorithms = {IpogNeg.class})
     public void checkNotBuildingNonValidSignatures (@InputParameter("FirstName") String FirstName,
                                                 @InputParameter("LastName") String LastName){
         Builder.setFirstName(FirstName);
         Builder.setLastName(LastName);
         boolean built = Builder.build();
-        assertTrue(!built && (!FirstName.matches("[a-zA-Z]+") || !LastName.matches("[a-zA-Z]+")));
-
+        Signature theSignature = Builder.getBuiltSignature();
+        if(!built){
+            assertNull(theSignature);
+            assertTrue(FirstName.equals("") || !FirstName.matches("[a-zA-Z]+")  || LastName.equals("") || !LastName.matches("[a-zA-Z]+"));
+        }else{
+            assertNotNull(theSignature);
+        }
     }
 
 }
