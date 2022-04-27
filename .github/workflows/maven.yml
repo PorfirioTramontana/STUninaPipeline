@@ -8,13 +8,20 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
-        
+    runs-on: ubuntu-latest        
     steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'adopt'
       - name: Setup Maven Action
         uses: s4u/setup-maven-action@v1.2.1
         with:
           java-version: '8'
           maven-version: '3.8.5'
-      - name: Build with Maven
+      - name: Verify Maven SetUp
         run: mvn verify
+      - name: Build with Maven
+        run: mvn --batch-mode --update-snapshots package
