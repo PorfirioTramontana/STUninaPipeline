@@ -26,8 +26,15 @@ jobs:
     steps:
       - name: Checkstyle
         run: mvn -e $MAVEN_CLI_OPTS $MAVEN_OPTS org.apache.maven.plugins:maven-checkstyle-plugin:3.1.0:checkstyle > checkstyle-result.xml
-      - name: Checkstyle Aritifact Generation
+        if: ${{ job.status == 'failure' }}
         uses: actions/upload-artifact@v3
         with:
           name: checkstyle-result.xml
           path: target/checkstyle-result.xml
+      - name: Spotbugs
+        run:  mvn $MAVEN_CLI_OPTS $MAVEN_OPTS compile com.github.spotbugs:spotbugs-maven-plugin:4.0.4:spotbugs > spotbugs-result.xml
+        if: ${{ job.status == 'failure' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: spotbugs-result.xml
+          path: target/spotbugs-result.xml
