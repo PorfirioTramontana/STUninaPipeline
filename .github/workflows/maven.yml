@@ -46,7 +46,7 @@ jobs:
       - name: Set Up
         uses: s4u/setup-maven-action@v1.2.1
         with:
-          java-version: '15'
+          java-version: '16'
           maven-version: '3.8.5'      
       - name: Spotbugs
         run:  'mvn $MAVEN_CLI_OPTS $MAVEN_OPTS compile com.github.spotbugs:spotbugs-maven-plugin:4.0.4:spotbugs'
