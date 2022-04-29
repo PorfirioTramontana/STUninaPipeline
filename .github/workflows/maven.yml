@@ -12,20 +12,7 @@ env:
 
 jobs:
 
-  Cache:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: |
-            .m2/repository/
-            target/
-          key: Global cache
-
   build:
-    needs: Cache
     runs-on: ubuntu-latest        
     steps:
       - name: Setup Maven Action
