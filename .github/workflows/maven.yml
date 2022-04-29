@@ -64,6 +64,6 @@ jobs:
     needs: build
     steps:
       - name: Unit Test
-        run: 'mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test -P unit-test'
+        run: '$PWD'
       - name: Integration Test
-        run: 'mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test -P integration-test'
+        run: 'ls -a'
