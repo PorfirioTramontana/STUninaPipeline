@@ -63,7 +63,7 @@ jobs:
       - name: Setup Maven Action
         uses: s4u/setup-maven-action@v1.2.1
         with:
-          java-version: '8'
+          java-version: '17'
           maven-version: '3.8.3'
       - name: Unit Test
         run: mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test -P unit-test
