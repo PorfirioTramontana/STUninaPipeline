@@ -1,6 +1,5 @@
 package UninaTestPipeline.integration.controller;
 
-import UninaTestPipeline.categories.IntegrationTest;
 import controller.SignatureBuilder;
 import de.rwth.swc.coffee4j.algorithmic.sequential.generator.ipogneg.algorithm.IpogNeg;
 import de.rwth.swc.coffee4j.engine.configuration.model.InputParameterModel;
@@ -14,7 +13,7 @@ import static de.rwth.swc.coffee4j.engine.configuration.model.Parameter.paramete
 import static de.rwth.swc.coffee4j.engine.configuration.model.constraints.ConstraintBuilder.constrain;
 import static org.junit.Assert.*;
 
-@Category(IntegrationTest.class)
+@Category(UninaTestPipeline.categories.IntegrationTest.class)
 public class SignatureBuilderTest {
 
     private static SignatureBuilder Builder = new SignatureBuilder();

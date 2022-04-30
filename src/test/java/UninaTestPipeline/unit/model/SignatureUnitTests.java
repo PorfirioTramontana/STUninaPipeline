@@ -1,7 +1,5 @@
 package UninaTestPipeline.unit.model;
 
-import UninaTestPipeline.categories.UnitTest;
-
 import de.rwth.swc.coffee4j.engine.configuration.model.InputParameterModel;
 import static de.rwth.swc.coffee4j.engine.configuration.model.Parameter.parameter;
 
@@ -19,7 +17,7 @@ import static de.rwth.swc.coffee4j.engine.configuration.model.constraints.Constr
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@Category(UnitTest.class)
+@Category(UninaTestPipeline.categories.UnitTest.class)
 public class SignatureUnitTests {
     private static final List<Signature> signatures = new ArrayList<>();
 

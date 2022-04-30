@@ -18,8 +18,8 @@ jobs:
       - name: Setup Maven Action
         uses: s4u/setup-maven-action@v1.2.1
         with:
-          java-version: '17'
-          maven-version: '3.8.5'
+          java-version: '8'
+          maven-version: '3.8.3'
       - name: Build with Maven
         run: mvn $MAVEN_CLI_OPTS $MAVEN_OPTS compile
   Checkstyle:
@@ -29,8 +29,8 @@ jobs:
       - name: Setup Maven Action
         uses: s4u/setup-maven-action@v1.2.1
         with:
-          java-version: '17'
-          maven-version: '3.8.5'
+          java-version: '8'
+          maven-version: '3.8.3'
       - name: Checkstyle
         run: mvn -e $MAVEN_CLI_OPTS $MAVEN_OPTS org.apache.maven.plugins:maven-checkstyle-plugin:3.1.0:checkstyle
       - name: Checkstyle-artifact
@@ -47,7 +47,7 @@ jobs:
         uses: s4u/setup-maven-action@v1.2.1
         with:
           java-version: '8'
-          maven-version: '3.8.5'
+          maven-version: '3.8.3'
       - name: Spotbugs
         run:  mvn $MAVEN_CLI_OPTS $MAVEN_OPTS compile com.github.spotbugs:spotbugs-maven-plugin:4.0.4:spotbugs
       - name: Spotbugs-artifact
@@ -63,8 +63,8 @@ jobs:
       - name: Setup Maven Action
         uses: s4u/setup-maven-action@v1.2.1
         with:
-          java-version: '17'
-          maven-version: '3.8.5'
+          java-version: '8'
+          maven-version: '3.8.3'
       - name: Unit Test
         run: mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test -P unit-test
       - name: Integration Test
@@ -76,8 +76,8 @@ jobs:
       - name: Setup Maven Action
         uses: s4u/setup-maven-action@v1.2.1
         with:
-          java-version: '17'
-          maven-version: '3.8.5'
+          java-version: '8'
+          maven-version: '3.8.3'
       - name: Package
         run: mvn $MAVEN_CLI_OPTS $MAVEN_OPTS -D skipTests clean package
       - name: Create Artifact

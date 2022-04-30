@@ -1,6 +1,5 @@
 package UninaTestPipeline.integration.controller;
 
-import UninaTestPipeline.categories.IntegrationTest;
 import controller.SignatureController;
 import model.Signature;
 import org.junit.Before;
@@ -13,7 +12,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@Category(IntegrationTest.class)
+@Category(UninaTestPipeline.categories.IntegrationTest.class)
 public class SignatureControllerIntegrationTests {
 
     private List<Signature> signatures;
