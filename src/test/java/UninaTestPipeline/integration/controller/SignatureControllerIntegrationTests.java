@@ -1,10 +1,11 @@
 package UninaTestPipeline.integration.controller;
 
+
 import controller.SignatureController;
 import model.Signature;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@Category(UninaTestPipeline.categories.IntegrationTest.class)
+
 public class SignatureControllerIntegrationTests {
 
     private List<Signature> signatures;
@@ -28,7 +29,7 @@ public class SignatureControllerIntegrationTests {
     }
 
     @Test
-    public void addSignatureResponse() {
+    public void addSignatureResponseTest() {
         String body;
         SignatureController sc = new SignatureController();
 
@@ -40,7 +41,7 @@ public class SignatureControllerIntegrationTests {
     }
 
     @Test
-    public void getSignaturesResponse() {
+    public void getSignaturesResponseTest() {
         String body, addBody;
         SignatureController sc = new SignatureController();
 

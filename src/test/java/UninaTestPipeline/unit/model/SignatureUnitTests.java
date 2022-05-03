@@ -1,5 +1,6 @@
 package UninaTestPipeline.unit.model;
 
+
 import de.rwth.swc.coffee4j.engine.configuration.model.InputParameterModel;
 import static de.rwth.swc.coffee4j.engine.configuration.model.Parameter.parameter;
 
@@ -8,7 +9,7 @@ import de.rwth.swc.coffee4j.junit.engine.annotation.configuration.sequential.gen
 import de.rwth.swc.coffee4j.junit.engine.annotation.parameter.parameter.InputParameter;
 import model.Signature;
 
-import org.junit.experimental.categories.Category;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import static de.rwth.swc.coffee4j.engine.configuration.model.constraints.Constr
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@Category(UninaTestPipeline.categories.UnitTest.class)
+
 public class SignatureUnitTests {
     private static final List<Signature> signatures = new ArrayList<>();
 
@@ -39,7 +40,7 @@ public class SignatureUnitTests {
 
     @CombinatorialTest()
     @EnableGeneration()
-    public void checkAddSignature (@InputParameter("FirstName") String FirstName,
+    public void AddSignatureTest (@InputParameter("FirstName") String FirstName,
                                    @InputParameter("LastName") String LastName){
         signatures.add(new Signature(FirstName,LastName));
         assertThat(signatures.get(signatures.size() - 1).getFirstName(),equalTo(FirstName));

@@ -1,5 +1,6 @@
 package UninaTestPipeline.integration.controller;
 
+
 import controller.SignatureBuilder;
 import de.rwth.swc.coffee4j.algorithmic.sequential.generator.ipogneg.algorithm.IpogNeg;
 import de.rwth.swc.coffee4j.engine.configuration.model.InputParameterModel;
@@ -7,13 +8,13 @@ import de.rwth.swc.coffee4j.junit.engine.annotation.CombinatorialTest;
 import de.rwth.swc.coffee4j.junit.engine.annotation.configuration.sequential.generation.EnableGeneration;
 import de.rwth.swc.coffee4j.junit.engine.annotation.parameter.parameter.InputParameter;
 import model.Signature;
-import org.junit.experimental.categories.Category;
+
 
 import static de.rwth.swc.coffee4j.engine.configuration.model.Parameter.parameter;
 import static de.rwth.swc.coffee4j.engine.configuration.model.constraints.ConstraintBuilder.constrain;
 import static org.junit.Assert.*;
 
-@Category(UninaTestPipeline.categories.IntegrationTest.class)
+
 public class SignatureBuilderTest {
 
     private static SignatureBuilder Builder = new SignatureBuilder();
@@ -35,7 +36,7 @@ public class SignatureBuilderTest {
 
     @CombinatorialTest()
     @EnableGeneration()
-    public void checkBuildingSignatures (@InputParameter("FirstName") String FirstName,
+    public void BuildingSignaturesTest (@InputParameter("FirstName") String FirstName,
                                    @InputParameter("LastName") String LastName){
         Builder.setFirstName(FirstName);
         Builder.setLastName(LastName);
@@ -47,7 +48,7 @@ public class SignatureBuilderTest {
 
     @CombinatorialTest()
     @EnableGeneration(algorithms = {IpogNeg.class})
-    public void checkNotBuildingNonValidSignatures (@InputParameter("FirstName") String FirstName,
+    public void NotBuildingNonValidSignaturesTest (@InputParameter("FirstName") String FirstName,
                                                 @InputParameter("LastName") String LastName){
         Builder.setFirstName(FirstName);
         Builder.setLastName(LastName);
