@@ -65,8 +65,10 @@ jobs:
         with:
           java-version: '17'
           maven-version: '3.8.3'
-      - name: Test
-        run: mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test
+      - name: Unit Test
+        run: mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test -P unit-test
+      - name: Integration Test
+        run: mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test -P integration-test
       - name: Shield.io
         run: echo "TODO"
   Package:
