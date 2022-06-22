@@ -123,13 +123,13 @@ jobs:
         run: |
           echo "NumberOfIntegrationTest=$(grep -o -w "Tests run: [0-9]*" *integration*.txt | cut -d' ' -f 3)" >> $GITHUB_ENV
           echo "NumberOfUnitTest=$(grep -o -w "Tests run: [0-9]*" *unit*.txt | cut -d' ' -f 3)" >> $GITHUB_ENV
-          echo "NumberOfTest= $NumberOfIntegrationTest + $NumberOfUnitTest" >> $GITHUB_ENV
       - name: Check
         run: |
-          echo $NumberOfTest
-          echo NumberOfUnitTest
-          echo NumberOfIntegrationTest
-       
+          echo "NumberOfTest= $(($NumberOfIntegrationTest + $NumberOfUnitTest))" >> $GITHUB_ENV
+          echo $NumberOfUnitTest
+          echo $NumberOfIntegrationTest
+      - name: Check2
+        run: echo $NumberOfTest
 
 
 # grep -o -w "Tests run: [0-9]*" *SignatureBuilderTest.txt | cut -d' ' -f 3
