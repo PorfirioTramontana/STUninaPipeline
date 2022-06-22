@@ -102,6 +102,13 @@ jobs:
           path: target/*.jar
   CreateBadges:
     runs-on: ubuntu-latest
+    env:
+      NumberOfTest: 0
+      TestResult: failed
+      UnitTestResult: failed
+      IntegrationTestResult: failed
+      NumberOfUnitTest: 0
+      NumberOfIntegrationTest: 0
     needs: Package
     steps:
       - name: Download Integration Test Report
@@ -112,3 +119,14 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Unit Test Report
+      - name: Retrieve Tests Data
+        run: |
+          echo "NumberOfIntegrationTest=$(grep -o -w "Tests run: [0-9]*" *integration*.txt | cut -d' ' -f 3)" >> $GITHUB_ENV
+          echo $NumberOfIntegrationTest
+          echo "NumberOfUnitTest=$(grep -o -w "Tests run: [0-9]*" *unit*.txt | cut -d' ' -f 3)" >> $GITHUB_ENV
+          echo $NumberOfUnitTest
+          echo "NumberOfTest= $NumberOfIntegrationTest + $NumberOfUnitTest" >> $GITHUB_ENV
+          echo $NumberOfTest
+
+
+# grep -o -w "Tests run: [0-9]*" *SignatureBuilderTest.txt | cut -d' ' -f 3
