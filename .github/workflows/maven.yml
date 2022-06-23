@@ -109,7 +109,8 @@ jobs:
       IntegrationTestResult: failed
       NumberOfUnitTest: 0
       NumberOfIntegrationTest: 0
-    needs: Package
+      UnitTestFailed: 0
+      IntegrationTestFailed: 0
     steps:
       - name: Download Integration Test Report
         uses: actions/download-artifact@v3
@@ -119,17 +120,27 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Unit Test Report
-      - name: Retrieve Tests Data
+      - name: Retrieve number of integration and unit test
         run: |
           echo "NumberOfIntegrationTest=$(grep -o -w "Tests run: [0-9]*" *integration*.txt | cut -d' ' -f 3)" >> $GITHUB_ENV
           echo "NumberOfUnitTest=$(grep -o -w "Tests run: [0-9]*" *unit*.txt | cut -d' ' -f 3)" >> $GITHUB_ENV
-      - name: Check
+          echo "UnitTestFailed=$(grep -o -w "Failures: [0-9]*" *unit*.txt | cut -d' ' -f 2)" >> $GITHUB_ENV
+          echo "IntegrationTestFailed=$(grep -o -w "Failures: [0-9]*" *integration*.txt | cut -d' ' -f 2)" >> $GITHUB_ENV
+      - name: Calculate Total Number Of Tests
         run: |
-          echo "NumberOfTest= $(($NumberOfIntegrationTest + $NumberOfUnitTest))" >> $GITHUB_ENV
-          echo $NumberOfUnitTest
-          echo $NumberOfIntegrationTest
-      - name: Check2
-        run: echo $NumberOfTest
+          echo "NumberOfTest=$(($NumberOfIntegrationTest + $NumberOfUnitTest))" >> $GITHUB_ENV
+      - name: Retrieve Tests result
+        run: |
+          chmod +x derivateResult.sh
+          echo "UnitTestResult=$(derivateResult.sh $UnitTestFailed)" >> $GITHUB_ENV
+          echo "IntegrationTestResult=$(derivateResult.sh $IntegrationTestFailed)" >> $GITHUB_ENV
+          echo "TestResult=$(derivateResult.sh $UnitTestFailed $IntegrationTestFailed)" >> $GITHUB_ENV
+      - name: CreateBadge
+        run: |
+          echo $UnitTestResult
+          echo $IntegrationTestResult
+          echo $TestResult
+          
 
-
-# grep -o -w "Tests run: [0-9]*" *SignatureBuilderTest.txt | cut -d' ' -f 3
+# usare due script in bash, uno che prende un numero e restituisce failed se è maggiore di 0,
+# l'altro che ne prende due è restituisce failed se uno dei due è maggiore di 0
