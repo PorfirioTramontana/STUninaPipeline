@@ -26,10 +26,10 @@ jobs:
           maven-version: '3.8.3'
       - name: Build with Maven
         run: mvn $MAVEN_CLI_OPTS $MAVEN_OPTS compile
-      - name: Spotbugs-artifact
+      - name: Script-artifact
         uses: actions/upload-artifact@v3
         with:
-          name: derivateResult
+          name: derivateResult.sh
           path: .github/derivateResult.sh
   Checkstyle:
     runs-on: ubuntu-latest
@@ -129,7 +129,7 @@ jobs:
       - name: Download Script derivateResult
         uses: actions/download-artifact@v3
         with:
-          name: derivateResult
+          name: derivateResult.sh
       - name: Retrieve number of integration and unit test
         run: |
           echo "NumberOfIntegrationTest=$(grep -o -w "Tests run: [0-9]*" *integration*.txt | cut -d' ' -f 3)" >> $GITHUB_ENV
@@ -141,9 +141,9 @@ jobs:
           echo "NumberOfTest=$(($NumberOfIntegrationTest + $NumberOfUnitTest))" >> $GITHUB_ENV
       - name: Retrieve Tests result
         run: |
-           echo "UnitTestResult=$(bash derivateResult $UnitTestFailed)" >> $GITHUB_ENV
-           echo "IntegrationTestResult=$(bash derivateResult $IntegrationTestFailed)" >> $GITHUB_ENV
-           echo "TestResult=$(bash derivateResult $UnitTestFailed $IntegrationTestFailed)" >> $GITHUB_ENV
+           echo "UnitTestResult=$(bash derivateResult.sh $UnitTestFailed)" >> $GITHUB_ENV
+           echo "IntegrationTestResult=$(bash derivateResult.sh $IntegrationTestFailed)" >> $GITHUB_ENV
+           echo "TestResult=$(bash derivateResult.sh $UnitTestFailed $IntegrationTestFailed)" >> $GITHUB_ENV
       - name: CreateBadge
         run: |
           echo $UnitTestResult
