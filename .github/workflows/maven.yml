@@ -147,10 +147,10 @@ jobs:
       - name: CreateBadge Test Result
         uses: emibcn/badge-action@v1.2.1
         with:
-          label: 'Test Result'
+          label: Test Result
           status: $TestResult
           color: green,555,daf
-          path: .github/badges/coverage.svg
+          path: .github/badges/result.svg
           
 
 # usare due script in bash, uno che prende un numero e restituisce failed se è maggiore di 0,
