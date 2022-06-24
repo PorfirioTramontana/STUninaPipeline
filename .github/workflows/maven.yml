@@ -132,10 +132,9 @@ jobs:
           echo "NumberOfTest=$(($NumberOfIntegrationTest + $NumberOfUnitTest))" >> $GITHUB_ENV
       - name: Retrieve Tests result
         run: |
-          chmod +x derivateResult.sh
-          echo "UnitTestResult=$(derivateResult.sh $UnitTestFailed)" >> $GITHUB_ENV
-          echo "IntegrationTestResult=$(derivateResult.sh $IntegrationTestFailed)" >> $GITHUB_ENV
-          echo "TestResult=$(derivateResult.sh $UnitTestFailed $IntegrationTestFailed)" >> $GITHUB_ENV
+          echo "UnitTestResult=$(bash .github/derivateResult.sh $UnitTestFailed)" >> $GITHUB_ENV
+          echo "IntegrationTestResult=$(bash .github/derivateResult.sh $IntegrationTestFailed)" >> $GITHUB_ENV
+          echo "TestResult=$(bash .github/derivateResult.sh $UnitTestFailed $IntegrationTestFailed)" >> $GITHUB_ENV
       - name: CreateBadge
         run: |
           echo $UnitTestResult
