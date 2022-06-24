@@ -144,11 +144,13 @@ jobs:
            echo "UnitTestResult=$(bash derivateResult.sh $UnitTestFailed)" >> $GITHUB_ENV
            echo "IntegrationTestResult=$(bash derivateResult.sh $IntegrationTestFailed)" >> $GITHUB_ENV
            echo "TestResult=$(bash derivateResult.sh $UnitTestFailed $IntegrationTestFailed)" >> $GITHUB_ENV
-      - name: CreateBadge
-        run: |
-          echo $UnitTestResult
-          echo $IntegrationTestResult
-          echo $TestResult
+      - name: CreateBadge Test Result
+        uses: emibcn/badge-action@v1.2.1
+        with:
+          label: 'Test Result'
+          status: $TestResult
+          color: green,555,daf
+          path: .github/badges/coverage.svg
           
 
 # usare due script in bash, uno che prende un numero e restituisce failed se è maggiore di 0,
