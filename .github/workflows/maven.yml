@@ -172,12 +172,12 @@ jobs:
           mkdir -p .github/badges/integration_test_number.svg
           mkdir -p .github/badges/unit_test_result.svg
           mkdir -p .github/badges/integration_test_result.svg
-          echo "::set-env name=TestResult::${{ needs.RetrieveTestResults.outputs.test-result }}"
-          echo "::set-env name=NumberOfTest::${{ needs.RetrieveTestResults.outputs.number-of-test }}"
-          echo "::set-env name=UnitTestResult::${{ needs.RetrieveTestResults.outputs.unit-test-result }}"
-          echo "::set-env name=IntegrationTestResult::${{ needs.RetrieveTestResults.outputs.integration-test-result }}"
-          echo "::set-env name=NumberOfUnitTest::${{ needs.RetrieveTestResults.outputs.number-of-unit-test }}"
-          echo "::set-env name=NumberOfIntegrationTest::${{ needs.RetrieveTestResults.outputs.number-of-integration-test }}"
+          echo "TestResult=${{ needs.RetrieveTestResults.outputs.test-result }}" >> $GITHUB_ENV
+          echo "NumberOfTest=${{ needs.RetrieveTestResults.outputs.number-of-test }}" >> $GITHUB_ENV
+          echo "UnitTestResult=${{ needs.RetrieveTestResults.outputs.unit-test-result }}" >> $GITHUB_ENV
+          echo "IntegrationTestResult=${{ needs.RetrieveTestResults.integration-test-result }}" >> $GITHUB_ENV
+          echo "NumberOfUnitTest=${{ needs.RetrieveTestResults.number-of-unit-test }}" >> $GITHUB_ENV
+          echo "NumberOfIntegrationTest=${{ needs.RetrieveTestResults.number-of-integration-test }}" >> $GITHUB_ENV
       - name: CreateBadge Test Result
         uses: emibcn/badge-action@v1.2.1
         with:
