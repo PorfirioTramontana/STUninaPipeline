@@ -182,11 +182,8 @@ jobs:
         uses: emibcn/badge-action@v1.2.1
         with:
           label: Test Result
-          status: ${ { env.TestResult } }
-          color: ${{
-            env.TestResult == Failed && 'green'     ||
-            env.TestResult == Passed && 'red'       ||
-            } }
+          status: ${{ env.TestResult }}
+          color: ${{ env.TestResult == Failed && 'green' || env.TestResult == Passed && 'red' }}
           path: .github/badges/test_result.svg
       - name: CreateBadge Test Number
         uses: emibcn/badge-action@v1.2.1
@@ -200,20 +197,14 @@ jobs:
         with:
           label: Unit Test Result
           status: ${ { env.UnitTestResult } }
-          color: ${{
-            env.UnitTestResult == Failed && 'green'     ||
-            env.UnitTestResult == Passed && 'red'       ||
-            } }
+          color: ${{ env.UnitTestResult == Failed && 'green' || env.UnitTestResult == Passed && 'red' }}
           path: .github/badges/unit_test_result.svg
       - name: CreateBadge Integration Test Result
         uses: emibcn/badge-action@v1.2.1
         with:
           label: Integration Test Result
           status: ${ { env.IntegrationTestResult } }
-          color: ${{
-            env.IntegrationTestResult == Failed && 'green'     ||
-            env.IntegrationTestResult == Passed && 'red'       ||
-            } }
+          color: ${{ env.IntegrationTestResult == Failed && 'green' || env.IntegrationTestResult == Passed && 'red' }}
           path: .github/badges/integration_test_result.svg
       - name: CreateBadge Integration Test Number
         uses: emibcn/badge-action@v1.2.1
