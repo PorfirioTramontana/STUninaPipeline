@@ -14,6 +14,15 @@ env:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
   MAVEN_CLI_OPTS: "--strict-checksums --threads 4C --batch-mode"
 
+  NumberOfTest: 0
+  TestResult: failed
+  UnitTestResult: failed
+  IntegrationTestResult: failed
+  NumberOfUnitTest: 0
+  NumberOfIntegrationTest: 0
+  UnitTestFailed: 0
+  IntegrationTestFailed: 0
+
 jobs:
 
   build:
@@ -105,18 +114,18 @@ jobs:
         with:
           name: UninaTestPipeline-1.0-SNAPSHOT.jar
           path: target/*.jar
-  CreateBadges:
+  RetrieveTestResults:
     runs-on: ubuntu-latest
     needs: Tests
-    env:
-      NumberOfTest: 0
-      TestResult: failed
-      UnitTestResult: failed
-      IntegrationTestResult: failed
-      NumberOfUnitTest: 0
-      NumberOfIntegrationTest: 0
-      UnitTestFailed: 0
-      IntegrationTestFailed: 0
+    outputs:
+      test-result: ${{ steps.set_outputs.outputs.test-result }}
+      number-of-test: ${{ steps.set_outputs.outputs.number-of-test }}
+      unit-test-result: ${{ steps.set_outputs.outputs.unit-test-result }}
+      integration-test-result: ${{ steps.set_outputs.outputs.integration-test-result }}
+      number-of-unit-test: ${{ steps.set_outputs.outputs.number-of-unit-test }}
+      number-of-integration-test: ${{ steps.set_outputs.outputs.number-of-integration-test }}
+      unit-test-failed: ${{ steps.set_outputs.outputs.unit-test-failed }}
+      integration-test-failed: ${{ steps.set_outputs.outputs.integration-test-failed }}
     steps:
       - name: Download Integration Test Report
         uses: actions/download-artifact@v3
@@ -144,14 +153,91 @@ jobs:
            echo "UnitTestResult=$(bash derivateResult.sh $UnitTestFailed)" >> $GITHUB_ENV
            echo "IntegrationTestResult=$(bash derivateResult.sh $IntegrationTestFailed)" >> $GITHUB_ENV
            echo "TestResult=$(bash derivateResult.sh $UnitTestFailed $IntegrationTestFailed)" >> $GITHUB_ENV
+      - name: Set Output Values
+        id: set_outputs
+        run: |
+          echo "::set-output name=test-result::$TestResult"
+          echo "::set-output name=number-of-test::$NumberOfTest"
+          echo "::set-output name=unit-test-result::$UnitTestResult"
+          echo "::set-output name=integration-test-result::$IntegrationTestResult"
+          echo "::set-output name=number-of-unit-test::$NumberOfUnitTest"
+          echo "::set-output name=number-of-integration-test::$NumberOfIntegrationTest"
+
+  CreateBadges:
+     runs-on: ubuntu-latest
+     needs: RetrieveTestResults
+     steps:
+      - name: Configure Job Eviroment
+        run: |
+          mkdir -p .github/badges/test_result.svg
+          mkdir -p .github/badges/test_number.svg
+          mkdir -p .github/badges/unit_test_number.svg
+          mkdir -p .github/badges/integration_test_number.svg
+          mkdir -p .github/badges/unit_test_result.svg
+          mkdir -p .github/badges/integration_test_result.svg
+          echo "::set-env name=TestResult::${{ needs.RetrieveTestResults.outputs.test-result }}"
+          echo "::set-env name=NumberOfTest::${{ needs.RetrieveTestResults.outputs.number-of-test }}"
+          echo "::set-env name=UnitTestResult::${{ needs.RetrieveTestResults.outputs.unit-test-result }}"
+          echo "::set-env name=IntegrationTestResult::${{ needs.RetrieveTestResults.outputs.integration-test-result }}"
+          echo "::set-env name=NumberOfUnitTest::${{ needs.RetrieveTestResults.outputs.number-of-unit-test }}"
+          echo "::set-env name=NumberOfIntegrationTest::${{ needs.RetrieveTestResults.outputs.number-of-integration-test }}"
       - name: CreateBadge Test Result
         uses: emibcn/badge-action@v1.2.1
         with:
           label: Test Result
-          status: $TestResult
-          color: green,555,daf
-          path: .github/badges/result.svg
-          
-
-# usare due script in bash, uno che prende un numero e restituisce failed se è maggiore di 0,
-# l'altro che ne prende due è restituisce failed se uno dei due è maggiore di 0
+          status: ${ { env.TestResult } }
+          color: ${{
+          env.TestResult == Failed && 'green'     ||
+          env.TestResult == Passed && 'red'       ||
+          } }
+          path: .github/badges/test_result.svg
+      - name: CreateBadge Test Number
+        uses: emibcn/badge-action@v1.2.1
+        with:
+          label: Number Of Test
+          status: ${ { env.NumberOfTest } }
+          color: ${{
+            env.TestResult == Failed && 'green'     ||
+            env.TestResult == Passed && 'red'       ||
+          } }
+          path: .github/badges/test_number.svg
+      - name: CreateBadge Unit Test Result
+        uses: emibcn/badge-action@v1.2.1
+        with:
+          label: Unit Test Result
+          status: ${ { env.UnitTestResult } }
+          color: ${{
+            env.UnitTestResult == Failed && 'green'     ||
+            env.UnitTestResult == Passed && 'red'       ||
+          } }
+          path: .github/badges/unit_test_result.svg
+      - name: CreateBadge Integration Test Result
+        uses: emibcn/badge-action@v1.2.1
+        with:
+          label: Integration Test Result
+          status: ${ { env.IntegrationTestResult } }
+          color: ${{
+            env.IntegrationTestResult == Failed && 'green'     ||
+            env.IntegrationTestResult == Passed && 'red'       ||
+          } }
+          path: .github/badges/integration_test_result.svg
+      - name: CreateBadge Integration Test Number
+        uses: emibcn/badge-action@v1.2.1
+        with:
+          label: Integration Test Number
+          status: ${ { env.NumberOfIntegrationTest } }
+          color: blue
+          path: .github/badges/integration_test_number.svg
+      - name: CreateBadge Unit Test Number
+        uses: emibcn/badge-action@v1.2.1
+        with:
+          label: Unit Test Number
+          status: ${ { env.NumberOfUnitTest } }
+          color: blue
+          path: .github/badges/unit_test_number.svg
+      - name: Create Badge Folder Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: badges
+          path: .github/badges/
+# Modificare per passare i valori delle variabili tra i job
