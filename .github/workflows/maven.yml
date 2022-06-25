@@ -187,8 +187,8 @@ jobs:
           label: Test Result
           status: ${ { env.TestResult } }
           color: ${{
-          env.TestResult == Failed && 'green'     ||
-          env.TestResult == Passed && 'red'       ||
+            env.TestResult == Failed && 'green'     ||
+            env.TestResult == Passed && 'red'       ||
           } }
           path: .github/badges/test_result.svg
       - name: CreateBadge Test Number
@@ -196,10 +196,7 @@ jobs:
         with:
           label: Number Of Test
           status: ${ { env.NumberOfTest } }
-          color: ${{
-            env.TestResult == Failed && 'green'     ||
-            env.TestResult == Passed && 'red'       ||
-          } }
+          color: blue
           path: .github/badges/test_number.svg
       - name: CreateBadge Unit Test Result
         uses: emibcn/badge-action@v1.2.1
