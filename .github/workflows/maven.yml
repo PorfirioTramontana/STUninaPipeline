@@ -231,7 +231,7 @@ jobs:
       - name: Commit Badges
         run: |
           mkdir -p badges
-          mv *.pdf badges
+          mv *.svg badges
           git config --global user.email "interluca@outlook.it"
           git config --global user.name "AsdInside"
           git add badges
