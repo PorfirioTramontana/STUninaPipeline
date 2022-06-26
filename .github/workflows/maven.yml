@@ -184,35 +184,35 @@ jobs:
         uses: emibcn/badge-action@v1.2.1
         with:
           label: Number Of Test
-          status: ${ { env.NumberOfTest } }
+          status: ${{ env.NumberOfTest }}
           color: blue
           path: badges/test_number.svg
       - name: CreateBadge Unit Test Result
         uses: emibcn/badge-action@v1.2.1
         with:
           label: Unit Test Result
-          status: ${ { env.UnitTestResult } }
+          status: ${{ env.UnitTestResult }}
           color: ${{ env.UnitTestResult == 'Failed' && 'red' || env.UnitTestResult == 'Passed' && 'green' }}
           path: badges/unit_test_result.svg
       - name: CreateBadge Integration Test Result
         uses: emibcn/badge-action@v1.2.1
         with:
           label: Integration Test Result
-          status: ${ { env.IntegrationTestResult } }
+          status: ${{ env.IntegrationTestResult }}
           color: ${{ env.IntegrationTestResult == 'Failed' && 'red' || env.IntegrationTestResult == 'Passed' && 'green' }}
           path: badges/integration_test_result.svg
       - name: CreateBadge Integration Test Number
         uses: emibcn/badge-action@v1.2.1
         with:
           label: Integration Test Number
-          status: ${ { env.NumberOfIntegrationTest } }
+          status: ${{ env.NumberOfIntegrationTest }}
           color: blue
           path: badges/integration_test_number.svg
       - name: CreateBadge Unit Test Number
         uses: emibcn/badge-action@v1.2.1
         with:
           label: Unit Test Number
-          status: ${ { env.NumberOfUnitTest } }
+          status: ${{ env.NumberOfUnitTest }}
           color: blue
           path: badges/unit_test_number.svg
       - name: Create Badge Folder Artifact
@@ -220,4 +220,12 @@ jobs:
         with:
           name: badges
           path: badges/
-
+  CommitBadges:
+    runs-on: ubuntu-latest
+    needs: CreateBadges
+    steps:
+      - name: Upload Badge Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: badges
+#      - name: Commit Badges
