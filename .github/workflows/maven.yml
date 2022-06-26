@@ -17,8 +17,6 @@ env:
   IntegrationTestResult: failed
   NumberOfUnitTest: 0
   NumberOfIntegrationTest: 0
-  UnitTestFailed: 0
-  IntegrationTestFailed: 0
 
 jobs:
 
@@ -114,6 +112,9 @@ jobs:
   RetrieveTestResults:
     runs-on: ubuntu-latest
     needs: Tests
+    env:
+      UnitTestFailed: 0
+      IntegrationTestFailed: 0
     outputs:
       test-result: ${{ steps.set_outputs.outputs.test-result }}
       number-of-test: ${{ steps.set_outputs.outputs.number-of-test }}
@@ -121,8 +122,6 @@ jobs:
       integration-test-result: ${{ steps.set_outputs.outputs.integration-test-result }}
       number-of-unit-test: ${{ steps.set_outputs.outputs.number-of-unit-test }}
       number-of-integration-test: ${{ steps.set_outputs.outputs.number-of-integration-test }}
-      unit-test-failed: ${{ steps.set_outputs.outputs.unit-test-failed }}
-      integration-test-failed: ${{ steps.set_outputs.outputs.integration-test-failed }}
     steps:
       - name: Download Integration Test Report
         uses: actions/download-artifact@v3
@@ -170,9 +169,9 @@ jobs:
           echo "TestResult=${{ needs.RetrieveTestResults.outputs.test-result }}" >> $GITHUB_ENV
           echo "NumberOfTest=${{ needs.RetrieveTestResults.outputs.number-of-test }}" >> $GITHUB_ENV
           echo "UnitTestResult=${{ needs.RetrieveTestResults.outputs.unit-test-result }}" >> $GITHUB_ENV
-          echo "IntegrationTestResult=${{ needs.RetrieveTestResults.integration-test-result }}" >> $GITHUB_ENV
-          echo "NumberOfUnitTest=${{ needs.RetrieveTestResults.number-of-unit-test }}" >> $GITHUB_ENV
-          echo "NumberOfIntegrationTest=${{ needs.RetrieveTestResults.number-of-integration-test }}" >> $GITHUB_ENV
+          echo "IntegrationTestResult=${{ needs.RetrieveTestResults.outputs.integration-test-result }}" >> $GITHUB_ENV
+          echo "NumberOfUnitTest=${{ needs.RetrieveTestResults.outputs.number-of-unit-test }}" >> $GITHUB_ENV
+          echo "NumberOfIntegrationTest=${{ needs.RetrieveTestResults.outputs.number-of-integration-test }}" >> $GITHUB_ENV
       - name: CreateBadge Test Result
         uses: emibcn/badge-action@v1.2.1
         with:
