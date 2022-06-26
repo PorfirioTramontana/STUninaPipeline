@@ -229,16 +229,15 @@ jobs:
         with:
           name: badges
       - name: Commit Badges
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: "*.svg"
-          message: 'Add/Update Badges'
+        run: |
+          git config --global user.email "interluca@outlook.it"
+          git config --global user.name "AsdInside"
+          git add *\.svg
+          git commit -m "Add/Update badge"
       - name: Push badge commit
-        uses: actions-js/push@master
+        uses: ad-m/github-push-action@master
         if: ${{ success() }}
         with:
           github_token: ${{ secrets.AUTH_T }}
           branch: $(echo ${GITHUB_REF#refs/heads/})
-          author_email: interluca@outlook.it
-          author_name: AsdInside
-          message: Add/Modified Badges
+
