@@ -234,8 +234,8 @@ jobs:
           git add badges/*
           git commit -m "Add/Update badge"
       - name: Push badge commit
-      uses: ad-m/github-push-action@master
-      if: ${{ success() }}
-      with:
-        github_token: ${{ secrets.AUTH_T }}
-        branch: $(echo ${GITHUB_REF#refs/heads/})
+        uses: ad-m/github-push-action@master
+        if: ${{ success() }}
+        with:
+          github_token: ${{ secrets.AUTH_T }}
+          branch: $(echo ${GITHUB_REF#refs/heads/})
