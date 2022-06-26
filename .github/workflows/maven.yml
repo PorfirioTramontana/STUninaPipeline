@@ -229,8 +229,8 @@ jobs:
           name: badges
       - name: Commit Badges
         run: |
-          git config --local user.email "interluca@outlook.it"
-          git config --local user.name "AsdInside"
+          git config --global user.email "interluca@outlook.it"
+          git config --global user.name "AsdInside"
           git add badges/*
           git commit -m "Add/Update badge"
       - name: Push badge commit
