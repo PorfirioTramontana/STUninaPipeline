@@ -229,6 +229,7 @@ jobs:
           name: badges
       - name: Commit Badges
         run: |
+          ls -a
           git config --global user.email "interluca@outlook.it"
           git config --global user.name "AsdInside"
           git add badges/*
