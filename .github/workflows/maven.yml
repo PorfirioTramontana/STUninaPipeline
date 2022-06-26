@@ -227,4 +227,15 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: badges
-#      - name: Commit Badges
+      - name: Commit Badges
+        run: |
+          git config --local user.email "interluca@outlook.it"
+          git config --local user.name "AsdInside"
+          git add badges/*
+          git commit -m "Add/Update badge"
+      - name: Push badge commit
+      uses: ad-m/github-push-action@master
+      if: ${{ success() }}
+      with:
+        github_token: ${{ secrets.AUTH_T }}
+        branch: $(echo ${GITHUB_REF#refs/heads/})
