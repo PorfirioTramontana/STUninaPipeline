@@ -166,12 +166,7 @@ jobs:
      steps:
       - name: Configure Job Eviroment
         run: |
-          mkdir -p .github/badges/test_result.svg
-          mkdir -p .github/badges/test_number.svg
-          mkdir -p .github/badges/unit_test_number.svg
-          mkdir -p .github/badges/integration_test_number.svg
-          mkdir -p .github/badges/unit_test_result.svg
-          mkdir -p .github/badges/integration_test_result.svg
+          mkdir -p badges
           echo "TestResult=${{ needs.RetrieveTestResults.outputs.test-result }}" >> $GITHUB_ENV
           echo "NumberOfTest=${{ needs.RetrieveTestResults.outputs.number-of-test }}" >> $GITHUB_ENV
           echo "UnitTestResult=${{ needs.RetrieveTestResults.outputs.unit-test-result }}" >> $GITHUB_ENV
@@ -183,46 +178,46 @@ jobs:
         with:
           label: Test Result
           status: ${{ env.TestResult }}
-          color: ${{ env.TestResult == 'Failed' && 'green' || env.TestResult == 'Passed' && 'red' }}
-          path: .github/badges/test_result.svg
+          color: ${{ env.TestResult == 'Failed' && 'red' || env.TestResult == 'Passed' && 'green' }}
+          path: badges/test_result.svg
       - name: CreateBadge Test Number
         uses: emibcn/badge-action@v1.2.1
         with:
           label: Number Of Test
           status: ${ { env.NumberOfTest } }
           color: blue
-          path: .github/badges/test_number.svg
+          path: badges/test_number.svg
       - name: CreateBadge Unit Test Result
         uses: emibcn/badge-action@v1.2.1
         with:
           label: Unit Test Result
           status: ${ { env.UnitTestResult } }
-          color: ${{ env.UnitTestResult == 'Failed' && 'green' || env.UnitTestResult == 'Passed' && 'red' }}
-          path: .github/badges/unit_test_result.svg
+          color: ${{ env.UnitTestResult == 'Failed' && 'red' || env.UnitTestResult == 'Passed' && 'green' }}
+          path: badges/unit_test_result.svg
       - name: CreateBadge Integration Test Result
         uses: emibcn/badge-action@v1.2.1
         with:
           label: Integration Test Result
           status: ${ { env.IntegrationTestResult } }
-          color: ${{ env.IntegrationTestResult == 'Failed' && 'green' || env.IntegrationTestResult == 'Passed' && 'red' }}
-          path: .github/badges/integration_test_result.svg
+          color: ${{ env.IntegrationTestResult == 'Failed' && 'red' || env.IntegrationTestResult == 'Passed' && 'green' }}
+          path: badges/integration_test_result.svg
       - name: CreateBadge Integration Test Number
         uses: emibcn/badge-action@v1.2.1
         with:
           label: Integration Test Number
           status: ${ { env.NumberOfIntegrationTest } }
           color: blue
-          path: .github/badges/integration_test_number.svg
+          path: badges/integration_test_number.svg
       - name: CreateBadge Unit Test Number
         uses: emibcn/badge-action@v1.2.1
         with:
           label: Unit Test Number
           status: ${ { env.NumberOfUnitTest } }
           color: blue
-          path: .github/badges/unit_test_number.svg
+          path: badges/unit_test_number.svg
       - name: Create Badge Folder Artifact
         uses: actions/upload-artifact@v3
         with:
           name: badges
-          path: .github/badges/
+          path: badges/
 
