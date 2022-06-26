@@ -230,9 +230,11 @@ jobs:
           name: badges
       - name: Commit Badges
         run: |
+          mkdir -p badges
+          mv *.pdf badges
           git config --global user.email "interluca@outlook.it"
           git config --global user.name "AsdInside"
-          git add *\.svg
+          git add badges
           git commit -m "Add/Update badge"
       - name: Push badge commit
         uses: ad-m/github-push-action@master
