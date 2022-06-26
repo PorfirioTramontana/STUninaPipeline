@@ -228,15 +228,13 @@ jobs:
         with:
           name: badges
       - name: Commit Badges
-        run: |
-          ls -a
-          git config --global user.email "interluca@outlook.it"
-          git config --global user.name "AsdInside"
-          git add badges/*
-          git commit -m "Add/Update badge"
+        run: git add badges/*
       - name: Push badge commit
-        uses: ad-m/github-push-action@master
+        uses: actions-js/push@master
         if: ${{ success() }}
         with:
           github_token: ${{ secrets.AUTH_T }}
           branch: $(echo ${GITHUB_REF#refs/heads/})
+          author_email: interluca@outlook.it
+          author_name: AsdInside
+          message: Add/Modified Badges
