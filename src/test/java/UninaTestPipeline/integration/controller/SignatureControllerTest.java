@@ -62,7 +62,7 @@ public class SignatureControllerTest {
     }
 
     @Test
-    public void CheckFileWiping(){
+    public void CheckFileWipingTest(){
         theController.addSignature(signatureList.get(0));
         theController.addSignature(signatureList.get(1));
         File signatureFile = new File("signatures.txt");
@@ -71,7 +71,7 @@ public class SignatureControllerTest {
     }
 
     @Test
-    public void CheckFileWriting(){
+    public void CheckFileWritingTest(){
         theController.addSignature(signatureList.get(0));
         theController.addSignature(signatureList.get(1));
         File signatureFile = new File("signatures.txt");
