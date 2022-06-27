@@ -14,7 +14,6 @@ env:
   IntegrationTestResult: failed
   NumberOfUnitTest: 0
   NumberOfIntegrationTest: 0
-  Release: ${{ github.event.release.tag_name }}
 
 jobs:
 
@@ -238,9 +237,9 @@ jobs:
           name: badges
       - name: Commit Badges
         run: |
-          mkdir -p badges_ver_"$Release"
-          mv *\.svg badges_ver_"$Release"
-          git add badges
+          mkdir -p badges_ver_${{ github.event.release.tag_name }}
+          mv *\.svg badges_ver_${{ github.event.release.tag_name }}
+          git add badges*
           git commit -m "Add/Update badge"
       - name: Push badge commit
         uses: ad-m/github-push-action@master
