@@ -1,6 +1,7 @@
 package UninaTestPipeline.integration.controller;
 
 
+import controller.SignatureBuilder;
 import controller.SignatureController;
 import model.Signature;
 import org.junit.Before;
@@ -12,6 +13,8 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 public class SignatureControllerIntegrationTests {
@@ -58,5 +61,10 @@ public class SignatureControllerIntegrationTests {
         assertThat(body,equalTo("Welcome to: \n" + this.signatures.get(0).getFirstName() + " " + this.signatures.get(0).getLastName()
                 + "\n" + this.signatures.get(1).getFirstName() + " " + this.signatures.get(1).getLastName() + "\n"));
 
+    }
+
+    @Test
+    public void FailureTest(){
+        fail();
     }
 }
