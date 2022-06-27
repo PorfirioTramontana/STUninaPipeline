@@ -31,8 +31,8 @@ jobs:
       - name: Script-artifact
         uses: actions/upload-artifact@v3
         with:
-          name: derivateResult.sh
-          path: .github/derivateResult.sh
+          name: Scripts
+          path: .github/BashScripts/
   Checkstyle:
     runs-on: ubuntu-latest
     needs: build
@@ -129,16 +129,16 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Unit Test Report
-      - name: Download Script derivateResult
+      - name: Download Bash Scripts
         uses: actions/download-artifact@v3
         with:
-          name: derivateResult.sh
+          name: Scripts
       - name: Retrieve number of integration and unit test
         run: |
-          echo "NumberOfIntegrationTest=$(grep -o -w "Tests run: [0-9]*" *integration*.txt | cut -d' ' -f 3)" >> $GITHUB_ENV
-          echo "NumberOfUnitTest=$(grep -o -w "Tests run: [0-9]*" *unit*.txt | cut -d' ' -f 3)" >> $GITHUB_ENV
-          echo "UnitTestFailed=$(grep -o -w "Failures: [0-9]*" *unit*.txt | cut -d' ' -f 2)" >> $GITHUB_ENV
-          echo "IntegrationTestFailed=$(grep -o -w "Failures: [0-9]*" *integration*.txt | cut -d' ' -f 2)" >> $GITHUB_ENV
+          echo "NumberOfIntegrationTest=$(bash RetrieveTestNumber.sh integration)" >> $GITHUB_ENV
+          echo "NumberOfUnitTest=$(bash RetrieveTestNumber.sh unit)" >> $GITHUB_ENV
+          echo "UnitTestFailed=$(bash RetrieveTestFailure.sh unit)" >> $GITHUB_ENV
+          echo "IntegrationTestFailed=$(bash RetrieveTestFailure.sh integration)" >> $GITHUB_ENV
       - name: Calculate Total Number Of Tests
         run: |
           echo "NumberOfTest=$(($NumberOfIntegrationTest + $NumberOfUnitTest))" >> $GITHUB_ENV
