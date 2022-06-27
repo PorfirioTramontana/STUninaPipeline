@@ -239,7 +239,7 @@ jobs:
         run: |
           mkdir -p badges_ver_${{ github.event.release.tag_name }}
           mv *\.svg badges_ver_${{ github.event.release.tag_name }}
-          git add badges*
+          git add badges_ver_${{ github.event.release.tag_name }}
           git commit -m "Add/Update badge"
       - name: Push badge commit
         uses: ad-m/github-push-action@master
