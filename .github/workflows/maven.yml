@@ -1,9 +1,8 @@
 name: Java CI with Maven
 
 on:
-  push
-# release:
-#   types: [published]
+  release:
+    types: [published]
 
 env:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
@@ -15,6 +14,7 @@ env:
   IntegrationTestResult: failed
   NumberOfUnitTest: 0
   NumberOfIntegrationTest: 0
+  Release: ${{ github.event.release.tag_name }}
 
 jobs:
 
@@ -46,7 +46,6 @@ jobs:
         continue-on-error: true
         run: mvn -e $MAVEN_CLI_OPTS $MAVEN_OPTS org.apache.maven.plugins:maven-checkstyle-plugin:3.1.0:checkstyle
       - name: Checkstyle-artifact
-        if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: checkstyle-result.xml
@@ -231,7 +230,7 @@ jobs:
           git config --global user.name "AsdInside"
       - name: Remove old Badges
         run: |
-          git rm -r badges
+          git rm -r badges*
           git commit -m "Deleted old Badges"
       - name: Upload Badge Artifact
         uses: actions/download-artifact@v3
@@ -239,8 +238,8 @@ jobs:
           name: badges
       - name: Commit Badges
         run: |
-          mkdir -p badges
-          mv *\.svg badges
+          mkdir -p badges_ver_"$Release"
+          mv *\.svg badges_ver_"$Release"
           git add badges
           git commit -m "Add/Update badge"
       - name: Push badge commit

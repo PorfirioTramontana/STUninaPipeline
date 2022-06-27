@@ -78,8 +78,6 @@ public class SignatureControllerTest {
         assertTrue(signatureFile.length() > 0);
     }
 
-    @Test
-    public void failureTest(){
-        fail();
-    }
+ //   @Test
+ //   public void failureTest(){fail();}
 }
