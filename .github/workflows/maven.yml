@@ -4,8 +4,6 @@ on:
   push
 # release:
 #   types: [published]
-#Workflows are not triggered for the created, edited, or deleted activity types for draft releases.
-#When you create your release through the GitHub browser UI, your release may automatically be saved as a draft.
 
 env:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"

@@ -60,7 +60,7 @@
                         <configuration>
                             <includes>
                                 <include>UninaTestPipeline.integration.controller.SignatureBuilderTest</include>
-                                <include>UninaTestPipeline.integration.controller.SignatureControllerIntegrationTests</include>
+                                <include>UninaTestPipeline.integration.controller.SignatureControllerTest</include>
                             </includes>
                         </configuration>
                     </plugin>

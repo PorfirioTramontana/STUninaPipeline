@@ -40,12 +40,19 @@ public class SignatureController {
     }
 
     public String addSignature(Signature newSignature) {
+        if(isNotValidSignature(newSignature)){
+            return "";
+        }
         checkSignaturesFile();
         writeSignatureToFile(newSignature);
         return "Hi " + newSignature.getFirstName() + " " + newSignature.getLastName() + ", we've just added you to the welcome list!";
     }
 
-    public void writeSignatureToFile(Signature newSignature) {
+    private boolean isNotValidSignature(Signature newSignature) {
+        return newSignature.getLastName().equals("") || newSignature.getFirstName().equals("");
+    }
+
+    private void writeSignatureToFile(Signature newSignature) {
         try {
             FileWriter signaturesWriter = new FileWriter("signatures.txt", true);
             signaturesWriter.append(newSignature.getFirstName().concat(" ".concat(newSignature.getLastName())));
@@ -68,7 +75,7 @@ public class SignatureController {
         }
     }
 
-    public void errorHandler(Exception e){
+    private void errorHandler(Exception e){
         System.out.println("An error occurred.");
         e.printStackTrace();
     }
