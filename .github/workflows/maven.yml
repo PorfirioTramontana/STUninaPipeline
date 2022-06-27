@@ -224,6 +224,10 @@ jobs:
     needs: CreateBadges
     steps:
       - uses: actions/checkout@v3
+      - name: Remove old Badges
+        uses: JesseTG/rm@v1.0.2
+        with:
+          path: badges
       - name: Upload Badge Artifact
         uses: actions/download-artifact@v3
         with:
@@ -241,4 +245,5 @@ jobs:
         if: ${{ success() }}
         with:
           github_token: ${{ secrets.AUTH_T }}
+
 
