@@ -41,7 +41,7 @@
                       <version>3.0.0-M5</version>
                       <configuration>
                           <includes>
-                              <include>UninaTestPipeline.unit.model.*</include>
+                              <include>UninaTestPipeline.unit.model.SignatureUnitTests</include>
                           </includes>
                       </configuration>
                   </plugin>
@@ -58,9 +58,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>3.0.0-M5</version>
                         <configuration>
-                            <includes>
-                                <include>UninaTestPipeline.integration.*</include>
-                            </includes>
+                            <excludes>UninaTestPipeline.unit.model.SignatureUnitTests</excludes>
                         </configuration>
                     </plugin>
                 </plugins>
