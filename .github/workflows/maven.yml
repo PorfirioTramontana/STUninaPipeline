@@ -225,9 +225,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Remove old Badges
-        uses: JesseTG/rm@v1.0.2
-        with:
-          path: badges
+        run: |
+          git rm badges
+          git commit -m "Deleted old Badges"
       - name: Upload Badge Artifact
         uses: actions/download-artifact@v3
         with:
