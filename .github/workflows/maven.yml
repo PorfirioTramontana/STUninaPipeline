@@ -224,6 +224,10 @@ jobs:
     needs: CreateBadges
     steps:
       - uses: actions/checkout@v3
+      - name: Configure Git
+        run: |
+          git config --global user.email "interluca@outlook.it"
+          git config --global user.name "AsdInside"
       - name: Remove old Badges
         run: |
           git rm -r badges
@@ -236,8 +240,6 @@ jobs:
         run: |
           mkdir -p badges
           mv *\.svg badges
-          git config --global user.email "interluca@outlook.it"
-          git config --global user.name "AsdInside"
           git add badges
           git commit -m "Add/Update badge"
       - name: Push badge commit
