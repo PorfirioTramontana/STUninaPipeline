@@ -262,7 +262,9 @@ jobs:
       - name: Update ReadMe
         run: bash WriteBadgesOnReadMe.sh test_result.svg test_number.svg unit_test_result.svg integration_test_result.svg integration_test_number.svg unit_test_number.svg
       - name: Commit
-        run: git commit -m "Added badges on ReadMe"
+        run: |
+          git add README.md
+          git commit -m "Added badges on ReadMe"
       - name: Push
         uses: ad-m/github-push-action@master
         if: ${{ success() }}
