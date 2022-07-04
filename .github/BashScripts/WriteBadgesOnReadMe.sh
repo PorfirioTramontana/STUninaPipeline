@@ -13,7 +13,7 @@ then
 
   cat READMECopy.txt
 
-  sed -i "s/<img src=*>//g" READMECopy.txt
+  sed -i "/<img src=.*>/d" READMECopy.txt
 
   cat READMECopy.txt
 
