@@ -13,13 +13,15 @@ then
 
   echo "$FirstLine" >> README.md
 
+  sed -i '/<img src=*>/d' READMECopy.txt
+
   for i in "$@"
   do
       if [[ "$i" = "$1" ]]
       then
         continue
       fi
-      echo "<img src=\"$1/$i\"> " >> README.md
+      echo -n "<img src=\"$1/$i\"> " >> README.md
   done
       printf "\n" >> README.md
       echo "$RestOfTheFile" >> README.md
