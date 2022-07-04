@@ -11,13 +11,13 @@ then
 
   FirstLine=$(head -n 1 READMECopy.txt)
 
-  sed -i 's/<img src=*>//g' READMECopy.txt
+  tmp=READMECopy.txt
 
-  RestOfTheFile=$(tail -n +2 READMECopy.txt)
+  sed 's/<img src=*>//g' READMECopy.txt > $tmp
+
+  RestOfTheFile=$(tail -n +2 $tmp)
 
   echo "$FirstLine" >> README.md
-
-
 
   for i in $badges
   do
