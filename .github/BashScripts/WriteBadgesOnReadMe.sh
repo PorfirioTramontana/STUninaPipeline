@@ -11,11 +11,7 @@ then
 
   FirstLine=$(head -n 1 READMECopy.txt)
 
-  cat READMECopy.txt
-
   sed -i "/<img src=.*>/d" READMECopy.txt
-
-  cat READMECopy.txt
 
   RestOfTheFile=$(tail -n +2 READMECopy.txt)
 
