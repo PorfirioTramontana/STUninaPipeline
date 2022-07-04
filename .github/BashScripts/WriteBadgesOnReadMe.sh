@@ -11,11 +11,11 @@ then
 
   FirstLine=$(head -n 1 READMECopy.txt)
 
-  tmp=READMECopy.txt
+  touch tmp.txt
 
-  sed 's/<img src=*>//g' READMECopy.txt > $tmp
+  sed '/<img src=*>/d' READMECopy.txt > tmp.txt
 
-  RestOfTheFile=$(tail -n +2 $tmp)
+  RestOfTheFile=$(tail -n +2 tmp.txt)
 
   echo "$FirstLine" >> README.md
 
