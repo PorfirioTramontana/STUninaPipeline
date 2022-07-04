@@ -15,12 +15,10 @@ then
 
   echo "$FirstLine" >> README.md
 
-  sed -i 's/<img src=*>//d' READMECopy.txt
-
   for i in $badges
   do
       echo -n "<img src=\"$1/$i\"> " >> README.md
   done
       printf "\n" >> README.md
-      echo "$RestOfTheFile" >> README.md
+      sed '/<img src=*>/d' "$RestOfTheFile" >> README.md
 fi
