@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Badge Workflow
 
 on:
   release:
@@ -225,8 +225,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Configure Git
         run: |
-          git config --global user.email "interluca@outlook.it"
-          git config --global user.name "AsdInside"
+          git config --global user.email "badgeworkflow@github.com"
+          git config --global user.name ${{ github.actor }}
       - name: Remove old Badges
         run: |
           git rm -r badges*
