@@ -7,6 +7,8 @@ then
 
   truncate -s 0 README.md
 
+  BadgeDirectory=$(find -type d -name "badges*")
+
   FirstLine=$(head -n 1 READMECopy.txt)
 
   RestOfTheFile=$(tail -n +2 READMECopy.txt)
@@ -15,7 +17,7 @@ then
 
   for i in "$@"
   do
-      echo "<img src=\"badges_ver_v0.0.2-test1.5/$i\"> " >> README.md
+      echo "<img src=\"$BadgeDirectory/$i\"> " >> README.md
   done
       printf "\n" >> README.md
       echo "$RestOfTheFile" >> README.md
