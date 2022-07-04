@@ -1,7 +1,9 @@
 #!/bin/bash
 
-if [[ $# -gt 1 ]]
+if [[ $# -gt 0 ]]
 then
+
+  badges=$(ls "$1")
 
   cp README.md READMECopy.txt
 
@@ -15,12 +17,8 @@ then
 
   sed -i '/<img src=*>/d' READMECopy.txt
 
-  for i in "$@"
+  for i in $badges
   do
-      if [[ "$i" = "$1" ]]
-      then
-        continue
-      fi
       echo -n "<img src=\"$1/$i\"> " >> README.md
   done
       printf "\n" >> README.md

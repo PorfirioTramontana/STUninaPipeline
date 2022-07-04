@@ -243,7 +243,7 @@ jobs:
         run: |
           mkdir -p badges_ver_${{ github.event.release.tag_name }}
           mv *\.svg badges_ver_${{ github.event.release.tag_name }}
-          bash WriteBadgesOnReadMe.sh badges_ver_${{ github.event.release.tag_name }} test_result.svg test_number.svg unit_test_result.svg integration_test_result.svg integration_test_number.svg unit_test_number.svg
+          bash WriteBadgesOnReadMe.sh badges_ver_${{ github.event.release.tag_name }} 
           git add badges_ver_${{ github.event.release.tag_name }} README.md
           git commit -m "Add/Update badge"
       - name: Push badge commit
