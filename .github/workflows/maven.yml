@@ -227,6 +227,10 @@ jobs:
         run: |
           git config --global user.email "badgeworkflow@github.com"
           git config --global user.name ${{ github.actor }}
+      - name: Download Bash Scripts
+        uses: actions/download-artifact@v3
+        with:
+          name: Scripts
       - name: Remove old Badges
         run: |
           git rm -r badges*
@@ -239,37 +243,15 @@ jobs:
         run: |
           mkdir -p badges_ver_${{ github.event.release.tag_name }}
           mv *\.svg badges_ver_${{ github.event.release.tag_name }}
-          git add badges_ver_${{ github.event.release.tag_name }}
+          bash WriteBadgesOnReadMe.sh badges_ver_${{ github.event.release.tag_name }} test_result.svg test_number.svg unit_test_result.svg integration_test_result.svg integration_test_number.svg unit_test_number.svg
+          git add badges_ver_${{ github.event.release.tag_name }} README.md
           git commit -m "Add/Update badge"
       - name: Push badge commit
         uses: ad-m/github-push-action@master
         if: ${{ success() }}
         with:
           github_token: ${{ secrets.AUTH_T }}
-  WriteBadges:
-    runs-on: ubuntu-latest
-    needs: CommitBadges
-    steps:
-      - uses: actions/checkout@v3
-      - name: Configure Git
-        run: |
-          git config --global user.email "badgeworkflow@github.com"
-          git config --global user.name ${{ github.actor }}
-      - name: Download Bash Scripts
-        uses: actions/download-artifact@v3
-        with:
-          name: Scripts
-      - name: Update ReadMe
-        run: bash WriteBadgesOnReadMe.sh test_result.svg test_number.svg unit_test_result.svg integration_test_result.svg integration_test_number.svg unit_test_number.svg
-      - name: Commit
-        run: |
-          git add README.md
-          git commit -m "Added badges on ReadMe"
-      - name: Push
-        uses: ad-m/github-push-action@master
-        if: ${{ success() }}
-        with:
-          github_token: ${{ secrets.AUTH_T }}
+
 
 
 

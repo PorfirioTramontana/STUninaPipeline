@@ -1,13 +1,11 @@
 #!/bin/bash
 
-if [[ $# -gt 0 ]]
+if [[ $# -gt 1 ]]
 then
 
   cp README.md READMECopy.txt
 
   truncate -s 0 README.md
-
-  BadgeDirectory=$(find -type d -name "badges*")
 
   FirstLine=$(head -n 1 READMECopy.txt)
 
@@ -17,7 +15,11 @@ then
 
   for i in "$@"
   do
-      echo "<img src=\"$BadgeDirectory/$i\"> " >> README.md
+      if [[ "$i" = "$1" ]]
+      then
+        continue
+      fi
+      echo "<img src=\"$1/$i\"> " >> README.md
   done
       printf "\n" >> README.md
       echo "$RestOfTheFile" >> README.md
