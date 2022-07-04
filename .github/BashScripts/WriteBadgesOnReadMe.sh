@@ -11,7 +11,7 @@ then
 
   FirstLine=$(head -n 1 READMECopy.txt)
 
-  sed -i '/<img src=*>/d' READMECopy.txt
+  sed -i 's/<img src=*>//g' READMECopy.txt
 
   RestOfTheFile=$(tail -n +2 READMECopy.txt)
 
