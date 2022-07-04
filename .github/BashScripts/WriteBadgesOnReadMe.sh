@@ -15,7 +15,7 @@ then
 
   echo "$FirstLine" >> README.md
 
-  sed -i '/<img src=*>/d' READMECopy.txt
+  sed -i 's/<img src=*>//d' READMECopy.txt
 
   for i in $badges
   do
